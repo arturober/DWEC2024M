@@ -7,21 +7,21 @@ console.log(Number.MAX_VALUE); // 1.7976931348623157e+308 (Número más grande)
 
 console.log(5 / 0); 
 
-let n = new Number(14);
-console.log(n + 24);
+let s1 = "32";
+let s2 = "14";
 
-let x = new Number(500);
-let y = new Number(500);
-console.log(x == y); // false
-console.log(x === y); // false
+console.log(s1 + s2); // 3214 (concatena cadenas)
+console.log(Number(s1) + Number(s2)); // 46
+console.log(+s1 + +s2); // 46
 
-let a = 500;
-console.log(x == a); // true
-console.log(x === a); // false
+console.log(+true); // true equivale a 1
+console.log(+false); // false equivale a 0
+console.log(+null); // 0
+console.log(+undefined); // NaN
 
-console.log(typeof a); // number
-console.log(typeof x); // object
+let nombre = "Juan";
+let num = +nombre;
+console.log(num); // NaN
+console.log(Number.isNaN(num)); // true
+console.log(num + 23); // NaN (no se puede operar)
 
-// Sin embargo, ambos tienen las mismas propiedades y métodos
-console.log(a.__proto__) // Number {...}
-console.log(x.__proto__) // Number {...}
