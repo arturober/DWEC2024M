@@ -56,3 +56,36 @@ console.log(nums2); // [1, 2, 3, 4] -> Original
 console.log(nums3); // [1, 2, 99, 4] -> Nuevo array con el cambio
 
 nums2.forEach(n => console.log(n));
+
+a = [3, 22, 15, 61, 9, 54];
+console.log(a.every(num =>  num < 100));  // true. Comprueba si cada número es menor a 100. 
+console.log(a.every(num => num % 2 == 0)); // false. Comprueba si cada número es par. 
+
+console.log(a.some(num => num % 2 == 0));  // true. Comprueba si algún elemento del array es par. 
+
+console.log(a.map(num => num*2)); // [8, 44, 66, 24, 18, 108]
+
+class Cuadrado {
+  constructor(lado) {
+    this.lado = lado;
+  }
+
+  getArea() {
+    return this.lado ** 2;
+  }
+}
+
+let cuadrados = a.map(n => new Cuadrado(n));
+console.log(cuadrados);
+
+console.log(a.filter(num => num % 2 == 0)); // [22, 54]
+console.log(cuadrados.filter(c => c.getArea() < 300)); // [22, 54]
+
+console.log(a.reduce((total, num) => total + num, 0));  // 164
+console.log(a.reduce((max, num) => Math.max(max, num), 0));  // 61
+
+let numbers = [2, 4, 6, 9, 14, 16];
+console.log(numbers.find(num => num >= 10)); // Imprime 14 (primer valor encontrado >= 10)
+console.log(numbers.findIndex(num => num >= 10)); // Imprime 4 (numbers[4] -> 14)
+console.log(numbers.findLast(num => num >= 10)); // Imprime 16 (último valor encontrado >= 10)
+console.log(numbers.findLastIndex(num => num >= 10)); // Imprime 5 (numbers[5] -> 16)
