@@ -15,3 +15,8 @@ console.log(str.match(/am/gi)); // Imprime ["am", "am", "Am"]
 
 const fechas = "Nací el 14/07/1953 y mi hermano el 16/09/1958";
 console.log(fechas.match(/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/g));
+
+console.log(str.replace(/am/gi, "xx")); // Imprime "I xx xxazed in xxerica"
+console.log(str.replace(/am/gi, function(match) {
+    return "-" + match.toUpperCase() + "-";
+})); // Imprime "I -AM- -AM-azed in -AM-erica"
