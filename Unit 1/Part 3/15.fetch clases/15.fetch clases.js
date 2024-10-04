@@ -1,13 +1,14 @@
-const SERVER = "https://api.fullstackpro.es/products-example";
+import {ProductsService} from './products-service.js';
+
+const productsService = new ProductsService();
 
 const productsTable = document.getElementById("products");
 const formProducto = document.getElementById("formProducto");
 const imgPreview = document.getElementById("imgPreview");
 
 async function getProducts() {
-  const resp = await fetch(`${SERVER}/products`);
-  const json = await resp.json();
-  json.products.forEach((p) => showProduct(p));
+  const products = await productsService.getProductos();
+  products.forEach((p) => showProduct(p));
 }
 
 function showProduct(product) {
@@ -34,7 +35,7 @@ function showProduct(product) {
   const btnDelete = document.createElement("button");
   btnDelete.textContent = "Delete";
   btnDelete.addEventListener("click", async (e) => {
-    await fetch(`${SERVER}/products/${product.id}`, { method: "DELETE" });
+    await productsService.delete(product.id);
     tr.remove();
   });
   tdDelete.append(btnDelete);
@@ -72,15 +73,7 @@ formProducto.addEventListener("submit", async (e) => {
     rating: 1,
   };
 
-  const r = await fetch(`${SERVER}/products`, {
-    method: "POST",
-    body: JSON.stringify(product),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const json = await r.json();
-  showProduct(json.product);
+  showProduct(await productsService.add(product));
   formProducto.reset();
   imgPreview.src = "";
 });

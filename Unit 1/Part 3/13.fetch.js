@@ -18,6 +18,7 @@ function showProduct(product) {
   const tdDesc = document.createElement("td");
   const tdPrice = document.createElement("td");
   const tdAvail = document.createElement("td");
+  const tdDelete = document.createElement("td");
 
   const img = document.createElement("img");
   img.src = product.imageUrl;
@@ -32,7 +33,15 @@ function showProduct(product) {
     new Date(product.available)
   );
 
-  tr.append(tdImage, tdDesc, tdPrice, tdAvail);
+  const btnDelete = document.createElement("button");
+  btnDelete.textContent = "Delete";
+  btnDelete.addEventListener("click", (e) => {
+    fetch(`${SERVER}/products/${product.id}`, { method: "DELETE" })
+      .then((r) => tr.remove());
+  });
+  tdDelete.append(btnDelete);
+
+  tr.append(tdImage, tdDesc, tdPrice, tdAvail, tdDelete);
   productsTable.querySelector("tbody").append(tr);
 }
 
@@ -55,22 +64,28 @@ formProducto.image.addEventListener("change", (e) => {
   });
 });
 
-formProducto.addEventListener('submit', e => {
+formProducto.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const product = {
     description: formProducto.description.value,
     price: +formProducto.price.value,
     imageUrl: imgPreview.src,
-    available: new Date().toISOString().split('T')[0],
-    rating: 1
-  }
+    available: new Date().toISOString().split("T")[0],
+    rating: 1,
+  };
 
   fetch(`${SERVER}/products`, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(product),
     headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+      "Content-Type": "application/json",
+    },
+  })
+    .then((r) => r.json())
+    .then((json) => {
+      showProduct(json.product);
+      formProducto.reset();
+      imgPreview.src = "";
+    });
 });
