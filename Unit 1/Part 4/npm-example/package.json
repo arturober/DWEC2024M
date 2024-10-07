@@ -1,0 +1,24 @@
+{
+  "name": "npm-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "hola": "echo \"Hola mundo!\"",
+    "start": "lite-server",
+    "test": "eslint index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bootstrap": "^5.2.x",
+    "dayjs": "^1.11.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.12.0",
+    "eslint": "^9.12.0",
+    "globals": "^15.10.0",
+    "lite-server": "^2.6.1",
+    "uglify-js": "^3.19.3"
+  }
+}
