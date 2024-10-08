@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "prehola": "echo \"Qué tal?\"",
     "hola": "echo \"Hola mundo!\"",
+    "posthola": "echo \"Ya me voy\"",
+    "prestart": "npm run test",
     "start": "lite-server",
     "test": "eslint index.js"
   },
