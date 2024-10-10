@@ -1,0 +1,23 @@
+{
+  "name": "vite-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "handlebars": "handlebars -c \"handlebars\" templates/*.hbs -f compiled.js",
+    "posthandlebars": "node hbs-replace.js",
+    "prestart": "npm run handlebars",
+    "start": "vite",
+    "prebuild": "npm run handlebars",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "replace-in-file": "^8.2.0",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "handlebars": "^4.7.8"
+  }
+}
