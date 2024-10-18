@@ -1,7 +1,7 @@
-import { Http } from './http.js';
-import { SERVER } from './constants.js';
-import { Product } from './interfaces/product.js';
-import { ProductsResponse } from './interfaces/responses.js';
+import { Http } from './http';
+import { SERVER } from './constants';
+import { Product } from './interfaces/product';
+import { ProductsResponse, SingleProductResponse } from './interfaces/responses';
 
 export class ProductsService {
   #http: Http;
@@ -15,16 +15,16 @@ export class ProductsService {
   }
 
   async add(producto: Product) {
-    const resp = await this.#http.post(`${SERVER}/products`, producto);
+    const resp = await this.#http.post<SingleProductResponse, Product>(`${SERVER}/products`, producto);
     return resp.product;
   }
 
-  async update(producto) {
-    const resp = await this.#http.put(`${SERVER}/products/${producto.id}`, product);
+  async update(producto: Product) {
+    const resp = await this.#http.put<SingleProductResponse, Product>(`${SERVER}/products/${producto.id}`, producto);
     return resp.product;
   }
 
-  delete(id) {
-    return this.#http.delete(`${SERVER}/products/${id}`);
+  delete(id: number) {
+    return this.#http.delete<void>(`${SERVER}/products/${id}`);
   }
 }

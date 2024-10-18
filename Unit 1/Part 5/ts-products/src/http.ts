@@ -11,7 +11,7 @@ export class Http {
       const resp = await fetch(url, { method, headers, body });
       if (!resp.ok) throw await resp.json();
       if (resp.status != 204) {
-          return await resp.json();
+          return await resp.json() as T;
       } else {
           return null as T;
       }

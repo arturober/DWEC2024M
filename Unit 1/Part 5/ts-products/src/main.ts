@@ -1,17 +1,18 @@
-import {ProductsService} from './products-service.js';
+import { Product } from './interfaces/product';
+import {ProductsService} from './products-service';
 
 const productsService = new ProductsService();
 
-const productsTable = document.getElementById("products");
-const formProducto = document.getElementById("formProducto");
-const imgPreview = document.getElementById("imgPreview");
+const productsTable = document.getElementById("products") as HTMLTableElement;
+const formProducto = document.getElementById("formProducto") as HTMLFormElement;
+const imgPreview = document.getElementById("imgPreview") as HTMLImageElement;
 
 async function getProducts() {
   const products = await productsService.getProductos();
   products.forEach((p) => showProduct(p));
 }
 
-function showProduct(product) {
+function showProduct(product: Product) {
   const tr = document.createElement("tr");
   const tdImage = document.createElement("td");
   const tdDesc = document.createElement("td");
@@ -34,21 +35,20 @@ function showProduct(product) {
 
   const btnDelete = document.createElement("button");
   btnDelete.textContent = "Delete";
-  btnDelete.addEventListener("click", async (e) => {
-    await productsService.delete(product.id);
+  btnDelete.addEventListener("click", async () => {
+    await productsService.delete(product.id!);
     tr.remove();
   });
   tdDelete.append(btnDelete);
 
   tr.append(tdImage, tdDesc, tdPrice, tdAvail, tdDelete);
-  productsTable.querySelector("tbody").append(tr);
+  productsTable.querySelector("tbody")!.append(tr);
 }
-
 
 getProducts();
 
-formProducto.image.addEventListener("change", (e) => {
-  const file = formProducto.image.files[0];
+(formProducto.image as HTMLImageElement).addEventListener("change", () => {
+  const file = (formProducto.image as HTMLInputElement).files![0];
   const reader = new FileReader();
 
   if (file) {
@@ -58,7 +58,7 @@ formProducto.image.addEventListener("change", (e) => {
 
   reader.addEventListener("load", () => {
     // Evento de conversión a Base64 completa (asíncrono)
-    imgPreview.src = reader.result; // Mostramos la imagen cargada en un elemento <img> (previsualización)
+    imgPreview.src = reader.result as string; // Mostramos la imagen cargada en un elemento <img> (previsualización)
   });
 });
 
@@ -66,8 +66,8 @@ formProducto.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const product = {
-    description: formProducto.description.value,
-    price: +formProducto.price.value,
+    description: (formProducto.description as HTMLInputElement).value,
+    price: +(formProducto.price as HTMLInputElement).value,
     imageUrl: imgPreview.src,
     available: new Date().toISOString().split("T")[0],
     rating: 1,
