@@ -7,7 +7,7 @@ export default [
   {files: ["**/*.{js,mjs,cjs,ts}"]},
   {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.recommended,
   {
     rules: {
       "@typescript-eslint/no-empty-function": "warn",
@@ -16,8 +16,8 @@ export default [
       "@typescript-eslint/no-unsafe-argument": "warn",
       "@typescript-eslint/prefer-as-const": "warn",
       "@typescript-eslint/require-await": "warn",
-      "@typescript-eslint/no-misused-promises": "off",
-      "@typescript-eslint/no-floating-promises": "off"
+      // "@typescript-eslint/no-misused-promises": "off",
+      // "@typescript-eslint/no-floating-promises": "off"
     },
     languageOptions: {
       parserOptions: {
