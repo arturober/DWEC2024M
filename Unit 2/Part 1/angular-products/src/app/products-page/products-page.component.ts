@@ -1,10 +1,12 @@
+import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Product } from '../interfaces/product';
 
 @Component({
   selector: 'products-page',
   standalone: true,
-  imports: [],
+  imports: [NgClass, FormsModule],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })
@@ -43,4 +45,33 @@ export class ProductsPageComponent {
       rating: 3,
     },
   ];
+
+  showImage = true;
+
+  newProduct: Product = {
+    description: '',
+    price: 0,
+    available: '',
+    imageUrl: '',
+    rating: 1
+  };
+
+  toggleImage() {
+    this.showImage = !this.showImage;
+  }
+
+  addProduct(formProduct: NgForm) {
+    this.products.push({...this.newProduct});
+    formProduct.resetForm();
+    this.newProduct.imageUrl = '';
+  }
+
+  changeImage(fileInput: HTMLInputElement) {
+    if (!fileInput.files?.length) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(fileInput.files[0]);
+    reader.addEventListener('loadend', () => {
+      this.newProduct.imageUrl = reader.result as string;
+    });
+  }
 }
