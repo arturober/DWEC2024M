@@ -70,6 +70,18 @@
 <div class="card mb-4">
   <div class="card-header bg-primary text-white">Mi lista de productos</div>
   <div class="card-block">
+    <div class="row">
+      <label class="col-form-label col-sm-2 text-sm-end" for="filterDesc">
+        Filter:
+      </label>
+      <div class="col-sm-5">
+        <input type="text" [(ngModel)]="search" class="form-control" id="filterDesc" placeholder="Filter..." />
+      </div>
+      <div class="col-form-label col-sm-5">
+        Filtered by: {{ search() }}
+      </div>
+    </div>
+
     @if(products.length) {
     <div class="table-responsive">
       <table class="table table-striped m-0">
@@ -91,19 +103,21 @@
             <th>Producto</th>
             <th>Precio</th>
             <th>Disponible</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          @for (product of products; track product.id) {
+          @for (product of products | productFilter:search(); track product.id) {
           <tr>
             <td>
               @if(showImage()) {
-              <img [src]="product.imageUrl" alt="" />
+              <img [src]="product.imageUrl" [title]="product.description | uppercase" alt="" />
               }
             </td>
             <td>{{ product.description }}</td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.available }}</td>
+            <td>{{ product.price | currency:'EUR'}}</td>
+            <td>{{ product.available | date:'dd/MM/yyyy' }}</td>
+            <td><button (click)="deleteProduct(product)" class="btn btn-danger btn-sm fw-bold">X</button></td>
           </tr>
           }
         </tbody>

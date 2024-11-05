@@ -1,12 +1,13 @@
-import { NgClass } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgClass, UpperCasePipe } from '@angular/common';
 import {  ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Product } from '../interfaces/product';
+import { ProductFilterPipe } from '../pipes/product-filter.pipe';
 
 @Component({
   selector: 'products-page',
   standalone: true,
-  imports: [NgClass, FormsModule],
+  imports: [NgClass, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, ProductFilterPipe],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })
@@ -56,6 +57,8 @@ export class ProductsPageComponent {
     rating: 1
   };
 
+  search = signal('');
+
   #changeDetector = inject(ChangeDetectorRef);
 
   toggleImage() {
@@ -63,7 +66,9 @@ export class ProductsPageComponent {
   }
 
   addProduct(formProduct: NgForm) {
-    this.products.push({...this.newProduct});
+    this.newProduct.id = Math.max(...this.products.map(p => p.id!)) + 1;
+    const newProduct = {...this.newProduct};
+    this.products = [...this.products, newProduct];
     formProduct.resetForm();
     this.newProduct.imageUrl = '';
   }
@@ -76,5 +81,9 @@ export class ProductsPageComponent {
       this.newProduct.imageUrl = reader.result as string;
       this.#changeDetector.markForCheck(); // Mark the component as dirty manually
     });
+  }
+
+  deleteProduct(product: Product) {
+    this.products = this.products.filter(p => p !== product);
   }
 }
