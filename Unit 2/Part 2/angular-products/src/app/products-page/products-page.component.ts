@@ -1,18 +1,30 @@
-import { CurrencyPipe, DatePipe, NgClass, UpperCasePipe } from '@angular/common';
-import {  ChangeDetectorRef, Component, inject, signal } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import {
+  NgClass
+} from '@angular/common';
+import {
+  Component,
+  computed,
+  signal
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Product } from '../interfaces/product';
-import { ProductFilterPipe } from '../pipes/product-filter.pipe';
+import { ProductItemComponent } from '../product-item/product-item.component';
+import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
   selector: 'products-page',
   standalone: true,
-  imports: [NgClass, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, ProductFilterPipe],
+  imports: [
+    NgClass,
+    FormsModule,
+    ProductItemComponent,
+    ProductFormComponent
+  ],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })
-export class ProductsPageComponent {
-  products: Product[] = [
+export class ProductsPageComponent  {
+  products =  signal<Product[]>([
     {
       id: 1,
       description: 'SSD hard drive',
@@ -45,45 +57,30 @@ export class ProductsPageComponent {
       imageUrl: '/ram.jpg',
       rating: 3,
     },
-  ];
+  ]);
 
   showImage = signal(true);
 
-  newProduct: Product = {
-    description: '',
-    price: 0,
-    available: '',
-    imageUrl: '',
-    rating: 1
-  };
-
   search = signal('');
-
-  #changeDetector = inject(ChangeDetectorRef);
+  filteredProducts = computed(() => {
+    const searchLower = this.search()?.toLocaleLowerCase();
+    return searchLower
+      ? this.products().filter((prod) =>
+          prod.description.toLocaleLowerCase().includes(searchLower)
+        )
+      : this.products();
+  });
 
   toggleImage() {
-    this.showImage.update(v => !v);
+    this.showImage.update((v) => !v);
   }
 
-  addProduct(formProduct: NgForm) {
-    this.newProduct.id = Math.max(...this.products.map(p => p.id!)) + 1;
-    const newProduct = {...this.newProduct};
-    this.products = [...this.products, newProduct];
-    formProduct.resetForm();
-    this.newProduct.imageUrl = '';
-  }
-
-  changeImage(fileInput: HTMLInputElement) {
-    if (!fileInput.files?.length) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(fileInput.files[0]);
-    reader.addEventListener('loadend', () => {
-      this.newProduct.imageUrl = reader.result as string;
-      this.#changeDetector.markForCheck(); // Mark the component as dirty manually
-    });
+  addProduct(product: Product) {
+    product.id = Math.max(...this.products().map((p) => p.id!)) + 1;
+    this.products.update(products => [...products, product]);
   }
 
   deleteProduct(product: Product) {
-    this.products = this.products.filter(p => p !== product);
+    this.products.update(products => products.filter((p) => p !== product));
   }
 }
