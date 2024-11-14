@@ -7,7 +7,7 @@ import { ProductsPageComponent } from './products-page/products-page.component';
   standalone: true,
   imports: [RouterOutlet, ProductsPageComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'Angular Products';
