@@ -1,11 +1,8 @@
-import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EncodeBase64Directive } from '../../shared/directives/encode-base64.directive';
-import { MinDateDirective } from '../../shared/directives/min-date.directive';
-import { ValidationClassesDirective } from '../../shared/directives/validation-classes.directive';
 import { CanComponentDeactivate } from '../../shared/guards/leave-page.guard';
 import { Product } from '../interfaces/product';
 import { ProductsService } from '../services/products.service';
@@ -13,33 +10,25 @@ import { ProductsService } from '../services/products.service';
 @Component({
   selector: 'product-form',
   standalone: true,
-  imports: [
-    FormsModule,
-    EncodeBase64Directive,
-    ValidationClassesDirective,
-    MinDateDirective,
-    DatePipe,
-  ],
+  imports: [ReactiveFormsModule, EncodeBase64Directive],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent implements CanComponentDeactivate {
-  newProduct: Product = {
-    description: '',
-    price: 0,
-    available: '',
-    imageUrl: '',
-    rating: 1,
-  };
-
   #productsService = inject(ProductsService);
   #destroyRef = inject(DestroyRef);
   #router = inject(Router);
   #saved = false; // Product has been saved
 
-  minDate = '2020-01-01';
-  days = ['Mo','Tu','We','Th','Fr','Sa','Su']
-  daysOpen = new Array(7).fill(true);
+  #fb = inject(NonNullableFormBuilder);
+
+  productForm = this.#fb.group({
+    description: '',
+    price: 0,
+    available: '',
+    imageUrl: '',
+  });
+  imageBase64 = '';
 
   canDeactivate() {
     return (
@@ -50,7 +39,11 @@ export class ProductFormComponent implements CanComponentDeactivate {
 
   addProduct() {
     this.#productsService
-      .insertProduct(this.newProduct)
+      .insertProduct({
+        ...this.productForm.getRawValue(),
+        rating: 1,
+        imageUrl: this.imageBase64,
+      })
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => {
         this.#saved = true;
