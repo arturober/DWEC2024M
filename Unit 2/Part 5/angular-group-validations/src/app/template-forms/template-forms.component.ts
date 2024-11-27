@@ -24,5 +24,4 @@ export class TemplateFormsComponent {
   daysOpen = new Array(7).fill(true);
 
   email = signal('');
-
 }

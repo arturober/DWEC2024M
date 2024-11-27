@@ -1,6 +1,6 @@
 import { Directive, OnInit, inject, Injector, input, Signal, signal, computed, untracked } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { NgModel, NgControl } from "@angular/forms";
+import { NgModel, NgControl, NgForm } from "@angular/forms";
 import { EMPTY } from "rxjs";
 
 @Directive({
