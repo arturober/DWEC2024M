@@ -24,7 +24,7 @@ export class SameValueDirective implements Validator {
 
   validate(control: FormControl): ValidationErrors | null {
     if (control?.value !== this.value()) {
-      return { equalValues: true };
+      return { sameValue: true };
     }
 
     return null; // No errors
