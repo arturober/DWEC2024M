@@ -9,11 +9,13 @@ import { OneCheckedDirective } from './one-checked.directive';
   ],
 })
 export class EqualValuesDirective {
-  controls = input.required<[string, string]>({alias: 'equalValues'});
+  controls = input<[string, string] | null>(null, {alias: 'equalValues'});
 
   validate(group: FormGroup): ValidationErrors | null {
-    const control1 = group.get(this.controls()[0]);
-    const control2 = group.get(this.controls()[1]);
+    if(!this.controls()) return null;
+
+    const control1 = group.get(this.controls()![0]);
+    const control2 = group.get(this.controls()![1]);
     if (control1?.value !== control2?.value) {
       return { equalValues: true };
     }

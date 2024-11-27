@@ -9,7 +9,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'template',
+    path: 'reactive',
     loadComponent: () =>
       import('./reactive-forms/reactive-forms.component').then(
         (m) => m.ReactiveFormsComponent
