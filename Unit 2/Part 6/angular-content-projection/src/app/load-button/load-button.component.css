@@ -12,7 +12,7 @@ button {
     background-color: rgba(0, 0, 0, 0.3);
 
     .load-icon {
-      animation: spin 1s linear infinite;
+      animation: spin 2s linear infinite;
       aspect-ratio: 1 / 1;
       height: 100%;
       width: auto;

@@ -18,35 +18,38 @@
     </div>
 
     @if (products().length) {
-    <div class="row headers g-0">
-      <div class="col-2">
-        @let buttonText = (showImage()?'Hide':'Show') + ' images';
-        <button
-          class="btn btn-sm"
-          [ngClass]="{
-                    'btn-danger': this.showImage(),
-                    'btn-primary': !this.showImage(),
-                  }"
-          (click)="toggleImage()"
-        >
-          {{ buttonText }}
-        </button>
+      <div class="row headers g-0">
+        <div class="col-2">
+          @let buttonText = (showImage()?'Hide':'Show') + ' images';
+          <button
+            class="btn btn-sm"
+            [ngClass]="{
+                      'btn-danger': this.showImage(),
+                      'btn-primary': !this.showImage(),
+                    }"
+            (click)="toggleImage()"
+          >
+            {{ buttonText }}
+          </button>
+        </div>
+        <div class="col-4 my-auto">Producto</div>
+        <div class="col my-auto">Precio</div>
+        <div class="col my-auto">Disponible</div>
+        <div class="col my-auto">Puntuación</div>
+        <div class="col-auto" style="width: 2em"></div>
       </div>
-      <div class="col-4 my-auto">Producto</div>
-      <div class="col my-auto">Precio</div>
-      <div class="col my-auto">Disponible</div>
-      <div class="col my-auto">Puntuación</div>
-      <div class="col-auto" style="width: 2em"></div>
-    </div>
-    @for (product of products(); track product.id) {
-    <product-item
-      [product]="product"
-      [showImage]="showImage()"
-      (deleted)="deleteProduct(product)"
-      class="row g-0"
-    />
-    } } @else {
-    <h3 class="p-4">No hay productos disponibles</h3>
+      @defer(hydrate on timer(5s)) {
+        @for (product of products(); track product.id) {
+        <product-item
+          [product]="product"
+          [showImage]="showImage()"
+          (deleted)="deleteProduct(product)"
+          class="row g-0"
+        />
+        }
+      }
+    } @else {
+      <h3 class="p-4">No hay productos disponibles</h3>
     }
   </div>
 </div>

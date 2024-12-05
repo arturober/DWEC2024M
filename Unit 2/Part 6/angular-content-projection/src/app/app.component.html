@@ -13,6 +13,12 @@
   </p>
 
   <p>
+    <load-button [loading]="loading" (click)="loading = !loading">
+      <i class="fa-solid fa-star" #icon></i> Home
+    </load-button>
+  </p>
+
+  <p>
     <button class="btn btn-primary" (click)="showModal = true">Show modal 1</button>
     <button class="btn btn-primary ms-2" (click)="showModal2 = true">Show modal 2</button>
   </p>
