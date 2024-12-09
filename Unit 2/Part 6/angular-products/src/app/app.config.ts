@@ -16,6 +16,7 @@ import {
 } from '@angular/platform-browser';
 import { routes } from './app.routes';
 import { baseUrlInterceptor } from './shared/interceptors/base-url.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withInterceptors([baseUrlInterceptor]), withFetch()),
     provideClientHydration(withIncrementalHydration()),
+    provideAnimationsAsync()
   ],
 };
 //provideZoneChangeDetection({ eventCoalescing: true })
