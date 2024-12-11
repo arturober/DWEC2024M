@@ -1,10 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { GoogleLoginDirective } from './google-login/google-login.directive';
-import { LoadGoogleApiService } from './google-login/load-google-api.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FbLoginDirective } from './fb-login/fb-login.directive';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { FbLoginDirective } from './fb-login/fb-login.directive';
+import { GoogleLoginDirective } from './google-login/google-login.directive';
 
 @Component({
   selector: 'app-root',
@@ -17,22 +15,17 @@ export class AppComponent {
 
   fbIcon = faFacebook;
 
-  #loadGoogle = inject(LoadGoogleApiService);
-
-  constructor() {
-    this.#loadGoogle.credential$.
-      pipe(takeUntilDestroyed())
-      .subscribe(
-        resp => console.log(resp.credential) // Envia esto tu API
-      );
-  }
-
   loggedFacebook(resp: fb.StatusResponse) {
     // Envía esto a tu API
     console.log(resp.authResponse.accessToken);
   }
 
-  showError(error: any) {
+  loggedGoogle(resp: google.accounts.id.CredentialResponse) {
+    // Envia esto tu API
+    console.log(resp.credential);
+  }
+
+  showError(error: string) {
     console.error(error);
   }
 }

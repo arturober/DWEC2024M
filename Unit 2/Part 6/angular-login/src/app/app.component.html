@@ -1,5 +1,7 @@
 @defer {
-<button googleLogin class="btn"></button>
+<div>
+  <google-login class="btn" (login)="loggedGoogle($event)"></google-login>
+</div>
 
 <div>
   <button
