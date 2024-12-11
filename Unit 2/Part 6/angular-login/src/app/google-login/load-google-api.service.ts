@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Subject, fromEvent, firstValueFrom } from 'rxjs';
 import { CLIENT_ID } from './google-login.config';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ export class LoadGoogleApiService {
   #loader: Promise<void>;
   #credential$ = new Subject<google.accounts.id.CredentialResponse>();
   #clientId = inject(CLIENT_ID, { optional: true });
+  document = inject(DOCUMENT); // Para que no falle con SSR habilitado
 
   constructor() {
     if (this.#clientId === null) {
@@ -33,10 +35,10 @@ export class LoadGoogleApiService {
   }
 
   async #loadApi(): Promise<void> {
-    const script = document.createElement('script');
+    const script = this.document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
-    document.body.appendChild(script);
+    this.document.body.appendChild(script);
 
     await firstValueFrom(fromEvent(script, 'load'));
 

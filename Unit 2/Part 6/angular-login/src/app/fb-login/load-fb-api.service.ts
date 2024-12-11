@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { FB_CONFIG } from './fb-login.config';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,7 @@ export class LoadFbApiService {
   #loader: Promise<void>;
 
   #fbConfig = inject(FB_CONFIG, { optional: true });
+  document = inject(DOCUMENT); // Para que no falle con SSR habilitado
 
   constructor() {
     if (!this.#fbConfig) {
