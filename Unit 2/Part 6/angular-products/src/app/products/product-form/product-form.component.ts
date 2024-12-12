@@ -9,6 +9,8 @@ import { ValidationClassesDirective } from '../../shared/directives/validation-c
 import { CanComponentDeactivate } from '../../shared/guards/leave-page.guard';
 import { Product } from '../interfaces/product';
 import { ProductsService } from '../services/products.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../../shared/modals/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'product-form',
@@ -35,6 +37,8 @@ export class ProductFormComponent implements CanComponentDeactivate {
   #productsService = inject(ProductsService);
   #destroyRef = inject(DestroyRef);
   #router = inject(Router);
+  #modalService = inject(NgbModal);
+
   #saved = false; // Product has been saved
 
   minDate = '2020-01-01';
@@ -44,11 +48,13 @@ export class ProductFormComponent implements CanComponentDeactivate {
   addForm = viewChild.required<NgForm>('addForm');
 
   canDeactivate() {
-    return (
-      this.addForm().pristine ||
-      this.#saved ||
-      confirm('¿Quieres abandonar la página?. Los cambios se perderán...')
-    );
+    if (this.#saved || this.addForm().pristine) {
+      return true;
+    }
+    const modalRef = this.#modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.title = 'Changes not saved';
+    modalRef.componentInstance.body = 'Do you want to leave the page?';
+    return modalRef.result.catch(() => false);
   }
 
   addProduct() {
