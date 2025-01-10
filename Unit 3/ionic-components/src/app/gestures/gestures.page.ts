@@ -34,6 +34,8 @@ export class GesturesPage {
     press: 0,
     swipeRight: 0,
     swipeLeft: 0,
+    pinch: 0,
+    rotate: 0
   };
 
   tap() {
@@ -50,5 +52,13 @@ export class GesturesPage {
 
   swipeRight() {
     this.events.swipeRight++;
+  }
+
+  pinch() {
+    this.events.pinch++;
+  }
+
+  rotate() {
+    this.events.rotate++;
   }
 }
