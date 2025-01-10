@@ -9,8 +9,12 @@
 
 <ion-content [fullscreen]="true">
   <ion-item (tap)="tap()" (press)="press()"
-    (swipeLeft)="swipeLeft()" (swipeRight)="swipeRight()">
-    <ion-label>Touch me</ion-label>
+    (swipeLeft)="swipeLeft()" (swipeRight)="swipeRight()"
+    (pinch)="pinch()" (rotate)="rotate()">
+    <ion-label>
+      <h2>Touch me</h2>
+      <p>You can pinch and rotate</p>
+    </ion-label>
   </ion-item>
   <p class="ion-padding-start ion-padding-end">
     {{events | json}}

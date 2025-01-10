@@ -42,6 +42,7 @@ export class PopoverPage {
 
     await popover.present();
     const resp = await popover.onDidDismiss();
+    console.log(resp);
     this.color.set(resp.data ? resp.data : 'No color selected');
   }
 }

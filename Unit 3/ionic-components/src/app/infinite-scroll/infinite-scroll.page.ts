@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   IonButtons,
   IonContent,
@@ -31,7 +31,7 @@ import {
   ],
 })
 export class InfiniteScrollPage {
-  items: String[] = [];
+  items = signal<string[]>([]);
   num = 1;
   finished = false;
 
@@ -44,9 +44,11 @@ export class InfiniteScrollPage {
     setTimeout(
       () => {
         const max = this.num + 20;
+        const newElements: string[] = [];
         for (; this.num < max; this.num++) {
-          this.items.push('Item ' + this.num);
+          newElements.push('Item ' + this.num);
         }
+        this.items.update(items => [...items, ...newElements]);
         if (this.num >= 120) {
           this.finished = true;
         }

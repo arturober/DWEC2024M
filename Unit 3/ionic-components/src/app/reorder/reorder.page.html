@@ -12,12 +12,15 @@
     {{disableOrdering ? 'Enable' : 'Disable' }} reorder
   </ion-button>
   <ion-list>
-    <ion-reorder-group (ionItemReorder)="reorder($event)" [disabled]="disableOrdering">
+    <ion-reorder-group
+      (ionItemReorder)="reorder($event)"
+      [disabled]="disableOrdering"
+    >
       @for (food of foods; track food) {
-        <ion-item>
-          <ion-label>{{food}}</ion-label>
-          <ion-reorder slot="end"></ion-reorder>
-        </ion-item>
+      <ion-item>
+        <ion-label>{{food}}</ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
       }
     </ion-reorder-group>
   </ion-list>

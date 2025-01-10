@@ -9,7 +9,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    @for (item of items; track $index) {
+    @for (item of items(); track $index) {
     <ion-item>{{item}}</ion-item>
     }
   </ion-list>

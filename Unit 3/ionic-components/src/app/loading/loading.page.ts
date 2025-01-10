@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import {
   IonHeader,
@@ -31,7 +31,7 @@ import {
 })
 export class LoadingPage {
   loading!: HTMLIonLoadingElement;
-  data?: string;
+  data = signal('');
 
   #loadingCtrl = inject(LoadingController);
 
@@ -45,7 +45,7 @@ export class LoadingPage {
 
     // Simulate a server call
     setTimeout(() => {
-      this.data = 'Data loaded';
+      this.data.set('Data loaded');
       this.loading.dismiss(); // Close the loading element
     }, 2000);
   }
