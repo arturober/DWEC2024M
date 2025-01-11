@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -33,12 +33,20 @@ import { JsonPipe } from '@angular/common';
     IonToolbar,
   ],
 })
-export class AppPage implements OnInit, OnDestroy {
+export class AppPage {
   backHandler!: PluginListenerHandle;
-  appInfo!: AppInfo;
+  appInfo = signal<AppInfo | null>(null);
 
-  async ngOnInit() {
-    this.appInfo = await App.getInfo();
+  #destroRef = inject(DestroyRef);
+
+  constructor() {
+    this.getInfo();
+
+    this.#destroRef.onDestroy(() => this.backHandler.remove());
+  }
+
+  async getInfo() {
+    this.appInfo.set(await App.getInfo());
 
     this.backHandler = await App.addListener('backButton', async (event) => {
       const resp = await Dialog.confirm({
@@ -52,9 +60,5 @@ export class AppPage implements OnInit, OnDestroy {
         App.exitApp();
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.backHandler.remove();
   }
 }

@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   Barcode,
   BarcodeFormat,
@@ -31,16 +31,20 @@ import {
     IonToolbar,
   ],
 })
-export class BarcodeScannerPage implements OnInit {
-  data?: Barcode;
-  installed = false;
+export class BarcodeScannerPage {
+  data = signal<Barcode | null>(null);
+  installed = signal(false);
 
-  async ngOnInit() {
+  constructor() {
+    this.isBarcodeScannerAvailable();
+  }
+
+  async isBarcodeScannerAvailable() {
     const resp = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
     if(!resp.available) {
       await BarcodeScanner.installGoogleBarcodeScannerModule();
     }
-    this.installed = true;
+    this.installed.set(true);
   }
 
   async scan() {
@@ -58,6 +62,6 @@ export class BarcodeScannerPage implements OnInit {
         BarcodeFormat.Itf,
       ],
     });
-    this.data = barcodes[0];
+    this.data.set(barcodes[0]);
   }
 }

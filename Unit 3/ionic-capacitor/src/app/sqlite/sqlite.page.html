@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-  @if (open) {
+  @if (open()) {
   <p>Connected to SQLite!</p>
   }
   <form #personForm="ngForm" (ngSubmit)="add(personForm)">
@@ -30,7 +30,7 @@
   </form>
 
   <ion-list>
-    @for (person of persons; track person.id; let i = $index) {
+    @for (person of people(); track person.id; let i = $index) {
     <ion-item>
       {{person.name}} ({{person.age}})
       <ion-button fill="clear" slot="end" (click)="remove(person, i)">
@@ -42,5 +42,5 @@
     }
   </ion-list>
 
-  <p>{{persons | json}}</p>
+  <p>{{people() | json}}</p>
 </ion-content>

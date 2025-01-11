@@ -8,6 +8,6 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-  <ion-button (click)="scan()" [disabled]="!installed">Scan</ion-button>
-  <p>{{data | json}}</p>
+  <ion-button (click)="scan()" [disabled]="!installed()">Scan</ion-button>
+  <p>{{data() | json}}</p>
 </ion-content>

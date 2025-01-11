@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   Directory,
@@ -45,15 +45,15 @@ import {
     IonLabel,
   ],
 })
-export class FilesystemPage implements OnInit {
-  files: FileInfo[] = [];
+export class FilesystemPage {
+  files = signal<FileInfo[]>([]);
 
-  filename = '';
-  filetext = '';
+  filename = signal('');
+  filetext = signal('');
 
   #alertCtrl = inject(AlertController);
 
-  ngOnInit() {
+  constructor() {
     this.loadFiles();
   }
 
@@ -62,19 +62,19 @@ export class FilesystemPage implements OnInit {
       path: '',
       directory: Directory.Documents,
     });
-    this.files = result.files;
+    this.files.set(result.files);
   }
 
   async createFile() {
     const result = await Filesystem.writeFile({
-      path: this.filename,
-      data: this.filetext,
+      path: this.filename(),
+      data: this.filetext(),
       directory: Directory.Documents,
       encoding: Encoding.UTF8,
     });
 
-    this.filename = '';
-    this.filetext = '';
+    this.filename.set('');
+    this.filetext.set('');
 
     this.loadFiles();
   }

@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import {
   CapacitorSQLite,
@@ -19,6 +19,7 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
+import { Person } from './person';
 
 @Component({
   selector: 'app-sqlite',
@@ -41,17 +42,29 @@ import {
     JsonPipe
   ],
 })
-export class SqlitePage implements OnInit, OnDestroy {
+export class SqlitePage {
   sqlite!: SQLiteConnection;
   db!: SQLiteDBConnection;
-  open = false;
-  persons: { id?: number; name: string; age: number }[] = [];
-  person: { id?: number; name: string; age: number } = {
+  open = signal(false);
+  people = signal<Person[]>([]);
+  person: Person = {
     name: '',
     age: 0,
   };
 
-  async ngOnInit() {
+  #destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.connect();
+    this.#destroyRef.onDestroy(async () => {
+      if (this.open()) {
+        console.log('Closing connection');
+        await this.sqlite.closeConnection('testsqlite', false);
+      }
+    });
+  }
+
+  async connect() {
     this.sqlite = new SQLiteConnection(CapacitorSQLite);
     this.db = await this.sqlite.createConnection(
       'testsqlite',
@@ -61,7 +74,7 @@ export class SqlitePage implements OnInit, OnDestroy {
       false
     );
     await this.db.open();
-    this.open = true;
+    this.open.set(true);
 
     await this.db.execute(`CREATE TABLE IF NOT EXISTS person (
       id integer primary key,
@@ -69,14 +82,7 @@ export class SqlitePage implements OnInit, OnDestroy {
       age integer not null)`);
 
     const result = await this.db.query('SELECT * FROM person');
-    this.persons = result.values!;
-  }
-
-  async ngOnDestroy() {
-    if (this.open) {
-      console.log('Closing connection');
-      await this.sqlite.closeConnection('testsqlite', false);
-    }
+    this.people.set(result.values!);
   }
 
   async add(personForm: NgForm) {
@@ -92,13 +98,13 @@ export class SqlitePage implements OnInit, OnDestroy {
     const idRes = await this.db.query('SELECT last_insert_rowid()');
 
     this.person.id = +Object.values<number>(idRes.values![0])[0];
-    this.persons.push(this.person);
+    this.people.update(people => people.concat(this.person));
     this.person = { name: '', age: 0 };
     personForm.resetForm(); // Resets validation styles
   }
 
   async remove(
-    person: { id?: number; name: string; age: number },
+    person: Person,
     index: number
   ) {
     if (!this.open) {
@@ -110,7 +116,7 @@ export class SqlitePage implements OnInit, OnDestroy {
     ]);
 
     if (delRes.changes!.changes! > 0) {
-      this.persons.splice(index, 1);
+      this.people.update(people => people.filter((p,i) => i !== index));
     }
   }
 }

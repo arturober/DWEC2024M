@@ -8,15 +8,15 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-  @if (user) {
+  @if (user()) {
     <ion-list>
       <ion-item text-wrap>
         <ion-avatar slot="start">
-          <ion-img [src]="user.imageUrl"></ion-img>
+          <ion-img [src]="user()!.imageUrl"></ion-img>
         </ion-avatar>
         <ion-label>
-          <h2>{{user.name}}</h2>
-          <p>{{user.email}}</p>
+          <h2>{{user()!.name}}</h2>
+          <p>{{user()!.email}}</p>
         </ion-label>
       </ion-item>
     </ion-list>

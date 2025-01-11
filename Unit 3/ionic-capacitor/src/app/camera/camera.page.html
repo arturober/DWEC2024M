@@ -11,7 +11,7 @@
 <ion-content class="ion-padding" [fullscreen]="true">
   <ion-button (click)="takePhoto()">Take photo</ion-button>
   <ion-button (click)="pickFromGallery()" color="success">Pick from gallery</ion-button>
-  @if (image) {
-    <ion-img [src]="image"></ion-img>
+  @if (image()) {
+    <ion-img [src]="image()"></ion-img>
   }
 </ion-content>

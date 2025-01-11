@@ -24,7 +24,7 @@
     <ion-list-header>
       <ion-label>List of files</ion-label>
     </ion-list-header>
-    @for (f of files; track f.name) {
+    @for (f of files(); track f.name) {
       <ion-item button (click)="readFile(f)">
         <ion-label>{{f.name}}</ion-label>
         <ion-button slot="end" color="danger" (click)="deleteFile(f)">X</ion-button>

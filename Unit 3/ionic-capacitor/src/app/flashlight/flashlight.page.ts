@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CapacitorFlash } from '@capgo/capacitor-flash';
 import {
   IonButton,
@@ -27,14 +27,16 @@ import {
     IonToolbar,
   ],
 })
-export class FlashlightPage implements OnDestroy {
-  on = false;
+export class FlashlightPage {
+  on = signal(false);
 
-  async toggleFlash() {
-    this.on = (await CapacitorFlash.toggle()).value;
+  #destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.#destroyRef.onDestroy(() => CapacitorFlash.switchOff());
   }
 
-  ngOnDestroy() {
-    CapacitorFlash.switchOff();
+  async toggleFlash() {
+    this.on.set((await CapacitorFlash.toggle()).value);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FacebookLogin,
   FacebookLoginResponse,
@@ -32,30 +32,20 @@ import {
     IonCol,
   ],
 })
-export class FacebookLoginPage implements OnInit {
-  accessToken = '';
-
-  constructor() {}
-
-  async ngOnInit() {
-    const resp =
-      (await FacebookLogin.getCurrentAccessToken()) as FacebookLoginResponse;
-    if (resp.accessToken) {
-      this.accessToken = resp.accessToken.token;
-    }
-  }
+export class FacebookLoginPage {
+  accessToken = signal('');
 
   async login() {
     const resp = (await FacebookLogin.login({
       permissions: ['email'],
     })) as FacebookLoginResponse;
     if (resp.accessToken) {
-      this.accessToken = resp.accessToken.token;
+      this.accessToken.set(resp.accessToken.token);
     }
   }
 
   async logout() {
     await FacebookLogin.logout();
-    this.accessToken = '';
+    this.accessToken.set('');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -26,11 +26,11 @@ import { JsonPipe } from '@angular/common';
   ],
 })
 export class DevicePage implements OnInit {
-  info!: DeviceInfo;
-  battery!: BatteryInfo;
+  info = signal<DeviceInfo | null>(null);
+  battery = signal<BatteryInfo | null>(null);
 
   async ngOnInit() {
-    this.info = await Device.getInfo();
-    this.battery = await Device.getBatteryInfo();
+    this.info.set(await Device.getInfo());
+    this.battery.set(await Device.getBatteryInfo());
   }
 }

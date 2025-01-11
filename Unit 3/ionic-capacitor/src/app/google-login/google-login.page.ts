@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { GoogleAuth, User } from '@codetrix-studio/capacitor-google-auth';
 import {
   IonAvatar,
@@ -40,11 +40,11 @@ import {
   ],
 })
 export class GoogleLoginPage {
-  user!: User;
+  user = signal<User|null>(null);
 
   async login() {
     try {
-      this.user = await GoogleAuth.signIn();
+      this.user.set(await GoogleAuth.signIn());
     } catch (err) {
       console.error(err);
     }

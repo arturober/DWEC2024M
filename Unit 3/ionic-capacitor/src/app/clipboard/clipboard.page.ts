@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Clipboard } from '@capacitor/clipboard';
 import {
@@ -33,13 +33,13 @@ import {
   ],
 })
 export class ClipboardPage {
-  text = '';
+  text = signal('');
 
   #toastCtrl = inject(ToastController);
 
   async copy() {
     await Clipboard.write({
-      string: this.text,
+      string: this.text(),
     });
 
     const toast = await this.#toastCtrl.create({
@@ -52,6 +52,6 @@ export class ClipboardPage {
 
   async paste() {
     const result = await Clipboard.read();
-    this.text = result.value;
+    this.text.set(result.value);
   }
 }

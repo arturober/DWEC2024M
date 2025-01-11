@@ -10,10 +10,10 @@
 <ion-content class="ion-padding" [fullscreen]="true">
   <ion-button
     expand="block"
-    [color]="on ? 'danger' : 'success'"
+    [color]="on() ? 'danger' : 'success'"
     (click)="toggleFlash()"
   >
     <ion-icon name="flashlight" slot="start"></ion-icon>
-    Turn {{on ? 'off' : 'on'}}
+    Turn {{on() ? 'off' : 'on'}}
   </ion-button>
 </ion-content>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -28,7 +28,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
   ],
 })
 export class CameraPage {
-  image!: string;
+  image = signal('');
 
   async takePhoto() {
     const photo = await Camera.getPhoto({
@@ -39,7 +39,7 @@ export class CameraPage {
       resultType: CameraResultType.DataUrl, // Base64 (url encoded)
     });
 
-    this.image = photo.dataUrl!;
+    this.image.set(photo.dataUrl!);
   }
 
   async pickFromGallery() {
@@ -49,6 +49,6 @@ export class CameraPage {
       width: 1024,
     });
 
-    this.image = photo.dataUrl!;
+    this.image.set(photo.dataUrl!);
   }
 }

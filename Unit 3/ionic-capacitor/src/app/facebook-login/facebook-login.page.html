@@ -8,18 +8,18 @@
 </ion-header>
 
 <ion-content class="ion-padding"  [fullscreen]="true">
-  @if (accessToken) {
+  @if (accessToken()) {
     <h3>Access token:</h3>
+    <p>{{accessToken()}}</p>
   }
-  <p>{{accessToken}}</p>
   <ion-row>
     <ion-col>
       <ion-button expand="block" color="primary" (click)="login()"
-		    [disabled]="accessToken !== ''">Login with Facebook</ion-button>
+		    [disabled]="accessToken() !== ''">Login with Facebook</ion-button>
     </ion-col>
     <ion-col>
       <ion-button expand="block" color="danger" fill="outline" (click)="logout()"
-		    [disabled]="accessToken === ''">Logout</ion-button>
+		    [disabled]="accessToken() === ''">Logout</ion-button>
     </ion-col>
   </ion-row>
 </ion-content>
