@@ -136,7 +136,7 @@ export class AppComponent {
     if (this.#platform.is('capacitor')) {
       await this.#platform.ready();
       SplashScreen.hide();
-      StatusBar.setBackgroundColor({ color: '#3880ff' });
+      StatusBar.setBackgroundColor({ color: '#0054e9' });
       StatusBar.setStyle({ style: Style.Dark });
       GoogleAuth.initialize();
     }

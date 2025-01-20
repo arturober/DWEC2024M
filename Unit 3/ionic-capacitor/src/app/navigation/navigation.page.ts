@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Geolocation } from '@capacitor/geolocation';
 import {
@@ -9,7 +9,6 @@ import {
   IonHeader,
   IonIcon,
   IonMenuButton,
-  IonSearchbar,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -44,8 +43,6 @@ export class NavigationPage {
   coords = signal<[number, number]>([-0.5, 38.5]);
 
   validInputId = false;
-
-  @ViewChild(IonSearchbar) searchBar!: IonSearchbar;
 
   constructor() {
     this.getPosition();

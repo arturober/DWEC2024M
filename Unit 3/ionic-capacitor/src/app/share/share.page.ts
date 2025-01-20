@@ -42,7 +42,6 @@ export class SharePage {
     Share.share({
       dialogTitle: 'Share with others!',
       text: this.message,
-
     });
   }
 }
