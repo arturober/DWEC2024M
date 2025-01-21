@@ -1,9 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ionic-products',
-  webDir: 'www'
+  appId: 'dewc.ionic.products',
+  appName: 'Ionic Products',
+  webDir: 'www/browser',
+  android: {
+    allowMixedContent: true
+  }
 };
 
 export default config;
