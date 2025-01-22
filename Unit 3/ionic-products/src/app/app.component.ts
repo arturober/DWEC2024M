@@ -15,7 +15,8 @@ import {
   IonAvatar,
   IonImg,
   Platform,
-  NavController
+  NavController,
+  ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, arrowUndoCircle, camera, chatboxEllipses, checkmarkCircle, close, documentText, exit, eye, home, images, informationCircle, logIn, menu, trash } from 'ionicons/icons';
@@ -23,6 +24,7 @@ import { User } from './auth/interfaces/user';
 import { AuthService } from './auth/services/auth.service';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { ActionPerformed, PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
 
 @Component({
   selector: 'app-root',
@@ -52,6 +54,7 @@ export class AppComponent {
   #authService = inject(AuthService);
   #platform = inject(Platform);
   #nav = inject(NavController);
+  #toast = inject(ToastController);
 
   public appPages = [
     { title: 'Home', url: '/products', icon: 'home' },
@@ -77,7 +80,42 @@ export class AppComponent {
       await this.#platform.ready();
       SplashScreen.hide();
       StatusBar.setBackgroundColor({ color: '#0054e9' });
+      console.log("Barra de color");
       StatusBar.setStyle({ style: Style.Dark });
+
+      console.log("Empezamos");
+      const res = await PushNotifications.checkPermissions();
+      if(res.receive !== 'granted') {
+        console.log("NO tengo!");
+        await PushNotifications.requestPermissions();
+      }
+      console.log("Seguimos!");
+
+      PushNotifications.addListener(
+        'pushNotificationReceived',
+        async (notification: PushNotificationSchema) => {
+          const toast = await this.#toast.create({
+            header: notification.title,
+            message: notification.body,
+            duration: 3000,
+          });
+          await toast.present();
+        }
+      );
+
+      // Method called when tapping on a notification
+      PushNotifications.addListener(
+        'pushNotificationActionPerformed',
+        (notification: ActionPerformed) => {
+          if (notification.notification.data.prodId) {
+            this.#nav.navigateRoot([
+              '/products',
+              notification.notification.data.prodId,
+              'comments',
+            ]);
+          }
+        }
+      );
     }
   }
 

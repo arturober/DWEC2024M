@@ -16,10 +16,12 @@ import {
   IonInput,
   AlertController,
   IonRouterLink,
-  NavController
+  NavController,
+  Platform
 } from '@ionic/angular/standalone';
 import { AuthService } from '../services/auth.service';
 import { RouterLink } from '@angular/router';
+import { PushNotifications, Token } from '@capacitor/push-notifications';
 
 @Component({
   selector: 'app-login',
@@ -46,14 +48,31 @@ import { RouterLink } from '@angular/router';
 export class LoginPage {
   email = '';
   password = '';
+  firebaseToken?: string;
 
   #authService = inject(AuthService);
   #alertCtrl = inject(AlertController);
   #navCtrl = inject(NavController);
+  #platform = inject(Platform);
+
+  constructor() {
+    if(this.#platform.is('android')) {
+      this.initializeFirebase();
+    }
+  }
+
+  async initializeFirebase() {
+    await PushNotifications.register();
+
+    // On success, we should be able to receive notifications
+    PushNotifications.addListener('registration', (token: Token) => {
+      this.firebaseToken = token.value;
+    });
+  }
 
   async login() {
     try {
-      await this.#authService.login(this.email, this.password);
+      await this.#authService.login(this.email, this.password, this.firebaseToken);
       this.#navCtrl.navigateRoot(['/products'])
     } catch {
       const alertRef = await this.#alertCtrl.create({
