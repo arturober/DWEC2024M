@@ -23,7 +23,6 @@ import { add, arrowUndoCircle, camera, chatboxEllipses, checkmarkCircle, close, 
 import { User } from './auth/interfaces/user';
 import { AuthService } from './auth/services/auth.service';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { StatusBar, Style } from '@capacitor/status-bar';
 import { ActionPerformed, PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
 
 @Component({
@@ -79,17 +78,11 @@ export class AppComponent {
     if (this.#platform.is('capacitor')) {
       await this.#platform.ready();
       SplashScreen.hide();
-      StatusBar.setBackgroundColor({ color: '#0054e9' });
-      console.log("Barra de color");
-      StatusBar.setStyle({ style: Style.Dark });
 
-      console.log("Empezamos");
       const res = await PushNotifications.checkPermissions();
       if(res.receive !== 'granted') {
-        console.log("NO tengo!");
         await PushNotifications.requestPermissions();
       }
-      console.log("Seguimos!");
 
       PushNotifications.addListener(
         'pushNotificationReceived',
