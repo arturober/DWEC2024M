@@ -1,8 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
-import {
-  FacebookLogin,
-  FacebookLoginResponse,
-} from '@capacitor-community/facebook-login';
+import { Component, signal } from '@angular/core';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 import {
   IonButton,
   IonButtons,
@@ -36,16 +33,19 @@ export class FacebookLoginPage {
   accessToken = signal('');
 
   async login() {
-    const resp = (await FacebookLogin.login({
-      permissions: ['email'],
-    })) as FacebookLoginResponse;
-    if (resp.accessToken) {
-      this.accessToken.set(resp.accessToken.token);
+    const resp = await SocialLogin.login({
+      provider: 'facebook',
+      options: {
+        permissions: ['email'],
+      },
+    });
+    if (resp.result.accessToken) {
+      this.accessToken.set(resp.result.accessToken.token);
     }
   }
 
   async logout() {
-    await FacebookLogin.logout();
+    await SocialLogin.logout({provider: 'facebook'});
     this.accessToken.set('');
   }
 }

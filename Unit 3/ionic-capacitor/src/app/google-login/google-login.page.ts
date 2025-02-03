@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { GoogleAuth, User } from '@codetrix-studio/capacitor-google-auth';
+import { GoogleLoginResponse, SocialLogin } from '@capgo/capacitor-social-login';
 import {
   IonAvatar,
   IonButton,
@@ -14,8 +14,9 @@ import {
   IonList,
   IonMenuButton,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/angular/standalone';
+import { GoogleUser } from './google-user';
 
 @Component({
   selector: 'app-google-login',
@@ -40,11 +41,20 @@ import {
   ],
 })
 export class GoogleLoginPage {
-  user = signal<User|null>(null);
+  user = signal<GoogleUser | null>(null);
 
   async login() {
     try {
-      this.user.set(await GoogleAuth.signIn());
+      const resp = await SocialLogin.login({
+        provider: 'google',
+        options: {
+          scopes: ['email', 'profile'],
+        },
+      });
+      if(resp.result.responseType === 'online') {
+        this.user.set(resp.result.profile);
+        console.log(resp.result.idToken);
+      }
     } catch (err) {
       console.error(err);
     }

@@ -1,5 +1,4 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { CapacitorFlash } from '@capgo/capacitor-flash';
 import {
   IonButton,
   IonButtons,
@@ -33,10 +32,10 @@ export class FlashlightPage {
   #destroyRef = inject(DestroyRef);
 
   constructor() {
-    this.#destroyRef.onDestroy(() => CapacitorFlash.switchOff());
+    // this.#destroyRef.onDestroy(() => CapacitorFlash.switchOff());
   }
 
   async toggleFlash() {
-    this.on.set((await CapacitorFlash.toggle()).value);
+    // this.on.set((await CapacitorFlash.toggle()).value);
   }
 }

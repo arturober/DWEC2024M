@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 import {
   IonApp,
   IonContent,
@@ -133,12 +133,22 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    if (this.#platform.is('capacitor')) {
+    console.log("Vamos a entrar...");
+    if (this.#platform.is('mobile')) {
+      console.log("Entrando...");
       await this.#platform.ready();
       SplashScreen.hide();
-      StatusBar.setBackgroundColor({ color: '#0054e9' });
-      StatusBar.setStyle({ style: Style.Dark });
-      GoogleAuth.initialize();
+      console.log("Vamos a ello!");
+      await SocialLogin.initialize({
+        google: {
+          webClientId: '746820501392-oalflicqch2kuc12s8rclb5rf7b1fist.apps.googleusercontent.com', // the web client id for Android and Web
+          // mode: 'offline' // replaces grantOfflineAccess
+        },
+        facebook: {
+          appId: '1100988247798042',
+          clientToken: '220465b47c8d891de3c0fbcf25e5c1fe',
+        },
+      });
     }
   }
 }

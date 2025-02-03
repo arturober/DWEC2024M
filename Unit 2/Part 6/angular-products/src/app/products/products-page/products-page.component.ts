@@ -1,5 +1,5 @@
-import { NgClass } from '@angular/common';
-import { afterNextRender, Component, computed, DestroyRef, effect, inject, signal, viewChild, viewChildren } from '@angular/core';
+import { isPlatformServer, NgClass } from '@angular/common';
+import { afterNextRender, Component, computed, DestroyRef, effect, inject, PLATFORM_ID, signal, viewChild, viewChildren } from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Product } from '../interfaces/product';
@@ -7,6 +7,7 @@ import { ProductItemComponent } from '../product-item/product-item.component';
 import { ProductsService } from '../services/products.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
+import { request } from 'express';
 
 @Component({
   selector: 'products-page',

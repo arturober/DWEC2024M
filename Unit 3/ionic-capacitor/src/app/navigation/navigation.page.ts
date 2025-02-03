@@ -12,11 +12,11 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { StartNavigation } from 'capacitor-start-navigation';
 import { GaAutocompleteDirective } from '../ol-maps/ga-autocomplete.directive';
 import { OlMapDirective } from '../ol-maps/ol-map.directive';
 import { OlMarkerDirective } from '../ol-maps/ol-marker.directive';
 import { SearchResult } from '../ol-maps/search-result';
+import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator';
 
 @Component({
   selector: 'app-navigation',
@@ -54,11 +54,7 @@ export class NavigationPage {
   }
 
   startNavigation() {
-    StartNavigation.launchMapsApp({
-      latitude: this.coords()[1],
-      longitude: this.coords()[0],
-      name: 'Directions example',
-    });
+    LaunchNavigator.navigate(this.coords().reverse());
   }
 
   changePlace(result: SearchResult) {

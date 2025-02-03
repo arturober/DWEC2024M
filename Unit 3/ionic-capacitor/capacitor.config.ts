@@ -8,12 +8,12 @@ const config: CapacitorConfig = {
     allowMixedContent: true
   },
   plugins: {
-    GoogleAuth: {
-      scopes: ['profile', 'email'],
-      androidClientId: '746820501392-oalflicqch2kuc12s8rclb5rf7b1fist.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true,
+    StatusBar: {
+      overlaysWebView: false,
+      style: "DARK",
+      backgroundColor: "#0054e9",
     },
-  }
+  },
 };
 
 export default config;
